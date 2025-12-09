@@ -1,0 +1,1 @@
+A complete React Project with all important react functionalities with Appwrite which is an open-source backend as a Service.
