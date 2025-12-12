@@ -1,4 +1,4 @@
-import { conf } from '../conf/conf.js';
+import conf from '../conf/conf.js';
 import { Client, Databases, ID, Storage, Query } from 'appwrite';
 
 export class Service {
@@ -28,20 +28,20 @@ export class Service {
         }
     }
 
-    async updatePost({ documentId, title, slug, content, featuredImage, status }) {
+    async updatePost(documentId, { title, content, featuredImage, status }) {
         try {
             return await this.databases.updateDocument(
                 conf.appwritedatabaseID,
                 conf.appwritecollectionID,
                 documentId,
-                { title, content, featuredImage, status }
+                { title, content, ...(featuredImage && { featuredImage }), status }
             );
         } catch (error) {
             throw error;
         }
     }
 
-    async deletePost({ slug }) {
+    async deletePost(slug) {
         try {
             return await this.databases.deleteDocument(
                 conf.appwritedatabaseID,
@@ -53,7 +53,7 @@ export class Service {
         }
     }
 
-    async getDocumentBySlug({ slug }) {
+    async getPost(slug) {
         try {
             return await this.databases.getDocument(
                 conf.appwritedatabaseID,
@@ -65,7 +65,7 @@ export class Service {
         }
     }
 
-    async getAllPosts(queries = [Query.equal("status", "active")]) {
+    async getPosts(queries = [Query.equal("status", "active")]) {
         try {
             return await this.databases.listDocuments(
                 conf.appwritedatabaseID,
@@ -77,7 +77,7 @@ export class Service {
         }
     }
 
-    async uploadFile({ file }) {
+    async uploadFile(file) {
         try {
             return await this.bucket.createFile(
                 conf.appwritebucketID,
@@ -89,7 +89,7 @@ export class Service {
         }
     }
 
-    async deleteFile({ fileId }) {
+    async deleteFile(fileId) {
         try {
             return await this.bucket.deleteFile(
                 conf.appwritebucketID,
@@ -100,7 +100,7 @@ export class Service {
         }
     }
 
-    async getFilePreview({ fileId, width = 200, height = 200 }) {
+    getFilePreview(fileId, width = 200, height = 200) {
         try {
             return this.bucket.getFilePreview(
                 conf.appwritebucketID,
